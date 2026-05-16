@@ -18,7 +18,12 @@ export default function Register() {
       loginUser(res.data.token, res.data.user)
       navigate('/dashboard')
     } catch (e) {
-      setErr(e.response?.data?.message || 'Registration failed')
+      if (e.response?.data?.errors) {
+        const firstError = Object.values(e.response.data.errors)[0][0]
+        setErr(firstError)
+      } else {
+        setErr(e.response?.data?.message || 'Registration failed')
+      }
     } finally {
       setLoading(false)
     }
